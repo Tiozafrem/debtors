@@ -12,6 +12,7 @@ type Authorization interface {
 	SignIn(email, password string) (*models.Tokens, error)
 	SignUp(ctx context.Context, email, password string) (*models.Tokens, error)
 	RefreshToken(refreshToken string) (*models.Tokens, error)
+	ParseTokenToUserUUID(ctx context.Context, token string) (string, error)
 }
 
 type Service struct {

@@ -48,6 +48,11 @@ func NewAuthorizationService(client *auth.Client) *ServiceAuthorization {
 	return &ServiceAuthorization{client: client}
 }
 
+func (s *ServiceAuthorization) ParseTokenToUserUUID(ctx context.Context, token string) (string, error) {
+	user, err := s.client.VerifyIDTokenAndCheckRevoked(ctx, token)
+	return user.UID, err
+}
+
 func (s *ServiceAuthorization) SignIn(email, password string) (*models.Tokens, error) {
 	url := fmt.Sprintf("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=%s",
 		os.Getenv("FIREBASE_API_KEY"))

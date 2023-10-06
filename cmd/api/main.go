@@ -11,6 +11,7 @@ import (
 
 	firebase "firebase.google.com/go"
 	"github.com/tiozafrem/debtors/handlers"
+	"github.com/tiozafrem/debtors/models"
 	repostiryFirestory "github.com/tiozafrem/debtors/repositories/firestore"
 	"github.com/tiozafrem/debtors/services"
 	"google.golang.org/api/option"
@@ -22,6 +23,9 @@ import (
 
 // @host localhost:8080
 // @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	var file_key string
 	ctx := context.Background()
@@ -47,7 +51,8 @@ func main() {
 		slog.Error("error initializing app: %v\n", err)
 	}
 
-	_ = repostiryFirestory.NewRepositoryFirestory(ctx, app)
+	rp := repostiryFirestory.NewRepositoryFirestory(ctx, app)
+	rp.AddUsers(ctx, &models.User{UserUUID: "test", TelegramId: "123"})
 	service := services.NewService(ctx, app)
 
 	handler := handlers.NewHandler(service)

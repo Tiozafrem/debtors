@@ -18,6 +18,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "Refresh",
                 "operationId": "refresh",
                 "parameters": [
@@ -74,6 +77,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "SignIn",
                 "operationId": "login",
                 "parameters": [
@@ -129,6 +135,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "auth"
                 ],
                 "summary": "SignUp",
                 "operationId": "registry",
@@ -223,6 +232,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

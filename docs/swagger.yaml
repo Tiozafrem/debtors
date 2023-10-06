@@ -73,6 +73,8 @@ paths:
           schema:
             $ref: '#/definitions/handlers.errorResponse'
       summary: Refresh
+      tags:
+      - auth
   /auth/signIn:
     post:
       consumes:
@@ -110,6 +112,8 @@ paths:
           schema:
             $ref: '#/definitions/handlers.errorResponse'
       summary: SignIn
+      tags:
+      - auth
   /auth/signUp:
     post:
       consumes:
@@ -147,4 +151,11 @@ paths:
           schema:
             $ref: '#/definitions/handlers.errorResponse'
       summary: SignUp
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -8,14 +8,14 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-type RepositoryFirestor struct {
+type RepositoryFirestore struct {
 	client *firestore.Client
 }
 
-func NewRepositoryFirestory(ctx context.Context, app *firebase.App) RepositoryFirestor {
+func NewRepositoryFirestory(ctx context.Context, app *firebase.App) RepositoryFirestore {
 	client, err := app.Firestore(ctx)
 	if err != nil {
 		slog.Error("error initializing db: %v\n", err)
 	}
-	return RepositoryFirestor{client: client}
+	return RepositoryFirestore{client: client}
 }

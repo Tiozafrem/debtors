@@ -19,6 +19,7 @@ type refreshInput struct {
 
 // @Summary SignUp
 // @Description create account, registry
+// @Tags auth
 // @ID registry
 // @Accept json
 // @Produce json
@@ -46,6 +47,7 @@ func (h *Handler) signUp(c *gin.Context) {
 
 // @Summary SignIn
 // @Description login
+// @Tags auth
 // @Id login
 // @Accept json
 // @Produce json
@@ -74,6 +76,7 @@ func (h *Handler) signIn(c *gin.Context) {
 
 // @Summary Refresh
 // @Description refresh token
+// @Tags auth
 // @Id refresh
 // @Accept json
 // @Produce json
