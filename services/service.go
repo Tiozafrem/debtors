@@ -5,6 +5,7 @@ import (
 
 	firebase "firebase.google.com/go"
 	"github.com/tiozafrem/debtors/models"
+	"github.com/tiozafrem/debtors/repositories/firestore"
 	"golang.org/x/exp/slog"
 )
 
@@ -15,11 +16,16 @@ type Authorization interface {
 	ParseTokenToUserUUID(ctx context.Context, token string) (string, error)
 }
 
-type Service struct {
-	Authorization
+type User interface {
+	PinTelegramId(ctx context.Context, userUUID string, id string) error
 }
 
-func NewService(ctx context.Context, app *firebase.App) *Service {
+type Service struct {
+	Authorization
+	User
+}
+
+func NewService(ctx context.Context, app *firebase.App, repository *firestore.RepositoryFirestore) *Service {
 	auth, err := app.Auth(ctx)
 	if err != nil {
 		slog.Error("error initializing auth: %v\n", err)
@@ -27,5 +33,6 @@ func NewService(ctx context.Context, app *firebase.App) *Service {
 
 	return &Service{
 		Authorization: NewAuthorizationService(auth),
+		User:          NewServiceUser(repository),
 	}
 }

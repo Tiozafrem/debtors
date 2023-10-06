@@ -11,6 +11,7 @@ require (
 	github.com/swaggo/swag v1.16.2
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	google.golang.org/api v0.143.0
+	google.golang.org/genproto v0.0.0-20230913181813-007df8e322eb
 )
 
 require (
@@ -65,7 +66,6 @@ require (
 	golang.org/x/tools v0.13.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20230913181813-007df8e322eb // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20230913181813-007df8e322eb // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230920204549-e6e6cdab5c13 // indirect
 	google.golang.org/grpc v1.57.0 // indirect

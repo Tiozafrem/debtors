@@ -36,6 +36,43 @@ info:
   title: Debtors API
   version: "1.0"
 paths:
+  /api/user/telegram{id}:
+    post:
+      consumes:
+      - application/json
+      operationId: pin-telegram
+      parameters:
+      - description: telegram Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Pin telegram id to auth user
+      tags:
+      - user
   /auth/refresh:
     post:
       consumes:

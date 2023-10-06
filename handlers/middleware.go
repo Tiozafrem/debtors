@@ -46,3 +46,18 @@ func authTokenFromHeader(c *gin.Context) (string, error) {
 	}
 	return headerParts[1], nil
 }
+
+func getUserUUID(c *gin.Context) (string, error) {
+	id, ok := c.Get(userCtx)
+
+	if !ok {
+		return "", errors.New("user id not found")
+	}
+
+	uuid, ok := id.(string)
+	if !ok {
+		return "", errors.New("user id is of invalid type")
+	}
+
+	return uuid, nil
+}

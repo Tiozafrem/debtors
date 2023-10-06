@@ -11,7 +11,6 @@ import (
 
 	firebase "firebase.google.com/go"
 	"github.com/tiozafrem/debtors/handlers"
-	"github.com/tiozafrem/debtors/models"
 	repostiryFirestory "github.com/tiozafrem/debtors/repositories/firestore"
 	"github.com/tiozafrem/debtors/services"
 	"google.golang.org/api/option"
@@ -52,8 +51,7 @@ func main() {
 	}
 
 	rp := repostiryFirestory.NewRepositoryFirestory(ctx, app)
-	rp.AddUsers(ctx, &models.User{UserUUID: "test", TelegramId: "123"})
-	service := services.NewService(ctx, app)
+	service := services.NewService(ctx, app, rp)
 
 	handler := handlers.NewHandler(service)
 	srv := Server{}

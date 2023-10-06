@@ -30,9 +30,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/refresh", h.refreshToken)
 	}
 
-	_ = router.Group("/api", h.userIdentity)
+	api := router.Group("/api", h.userIdentity)
 	{
-
+		users := api.Group("/user")
+		{
+			users.POST("/telegram:id", h.pinTelegramId)
+		}
 	}
 	return router
 }
