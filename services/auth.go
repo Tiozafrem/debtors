@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 
 	"firebase.google.com/go/auth"
@@ -17,6 +16,7 @@ import (
 
 type ServiceAuthorization struct {
 	client *auth.Client
+	apiKey string
 }
 
 // Struct for send refresh token
@@ -44,8 +44,8 @@ type refreshResponse struct {
 	IdToken      string `json:"id_token"`
 }
 
-func NewAuthorizationService(client *auth.Client) *ServiceAuthorization {
-	return &ServiceAuthorization{client: client}
+func NewAuthorizationService(client *auth.Client, apiKey string) *ServiceAuthorization {
+	return &ServiceAuthorization{client: client, apiKey: apiKey}
 }
 
 func (s *ServiceAuthorization) ParseTokenToUserUUID(ctx context.Context, token string) (string, error) {
@@ -55,7 +55,7 @@ func (s *ServiceAuthorization) ParseTokenToUserUUID(ctx context.Context, token s
 
 func (s *ServiceAuthorization) SignIn(email, password string) (*models.Tokens, error) {
 	url := fmt.Sprintf("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=%s",
-		os.Getenv("FIREBASE_API_KEY"))
+		s.apiKey)
 	reqBody := signInBody{
 		Email:             email,
 		Password:          password,
@@ -108,7 +108,7 @@ func (s *ServiceAuthorization) SignUp(ctx context.Context, email, password strin
 
 func (s *ServiceAuthorization) RefreshToken(refreshToken string) (*models.Tokens, error) {
 	url := fmt.Sprintf("https://securetoken.googleapis.com/v1/token?key=%s",
-		os.Getenv("FIREBASE_API_KEY"))
+		s.apiKey)
 	reqBody := newUserRefresh(refreshToken)
 	buffer := new(bytes.Buffer)
 	if err := json.NewEncoder(buffer).Encode(reqBody); err != nil {

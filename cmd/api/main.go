@@ -50,8 +50,14 @@ func main() {
 		slog.Error("error initializing app: %v\n", err)
 	}
 
+	apiKey := os.Getenv("FIREBASE_API_KEY")
+	if apiKey == "" {
+		slog.Error("env FIREBASE_API_KEY is null")
+		return
+	}
+
 	rp := repostiryFirestory.NewRepositoryFirestory(ctx, app)
-	service := services.NewService(ctx, app, rp)
+	service := services.NewService(ctx, app, rp, apiKey)
 
 	handler := handlers.NewHandler(service)
 	srv := Server{}

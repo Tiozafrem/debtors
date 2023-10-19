@@ -26,14 +26,15 @@ type Service struct {
 	User
 }
 
-func NewService(ctx context.Context, app *firebase.App, repository *firestore.RepositoryFirestore) *Service {
+func NewService(ctx context.Context, app *firebase.App,
+	repository *firestore.RepositoryFirestore, apiKey string) *Service {
 	auth, err := app.Auth(ctx)
 	if err != nil {
 		slog.Error("error initializing auth: %v\n", err)
 	}
 
 	return &Service{
-		Authorization: NewAuthorizationService(auth),
+		Authorization: NewAuthorizationService(auth, apiKey),
 		User:          NewServiceUser(repository),
 	}
 }
