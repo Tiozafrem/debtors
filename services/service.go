@@ -18,6 +18,7 @@ type Authorization interface {
 
 type User interface {
 	PinTelegramId(ctx context.Context, userUUID string, id string) error
+	PinUserToUser(ctx context.Context, userUUIDowner string, userUUIDchild string) error
 }
 
 type Service struct {

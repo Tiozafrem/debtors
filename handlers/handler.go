@@ -35,6 +35,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		users := api.Group("/user")
 		{
 			users.POST("/telegram:id", h.pinTelegramId)
+			users.POST("/pin:uuid", h.pinUserToUser)
 		}
 	}
 	return router
