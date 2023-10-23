@@ -1,3 +1,4 @@
 /*.json
-.vscode
+.vscode/*
+!.vscode/launch.json
 .env
