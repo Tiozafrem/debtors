@@ -36,6 +36,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			users.POST("/telegram:id", h.pinTelegramId)
 			users.POST("/pin:uuid", h.pinUserToUser)
+			users.POST(":uuid/transaction:value", h.addTransaction)
 		}
 	}
 	return router
