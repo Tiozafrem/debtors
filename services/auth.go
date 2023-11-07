@@ -50,7 +50,10 @@ func NewAuthorizationService(client *auth.Client, apiKey string) *ServiceAuthori
 
 func (s *ServiceAuthorization) ParseTokenToUserUUID(ctx context.Context, token string) (string, error) {
 	user, err := s.client.VerifyIDTokenAndCheckRevoked(ctx, token)
-	return user.UID, err
+	if user == nil {
+		return "", err
+	}
+	return user.UID, nil
 }
 
 func (s *ServiceAuthorization) SignIn(email, password string) (*models.Tokens, error) {
