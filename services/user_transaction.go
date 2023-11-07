@@ -8,7 +8,7 @@ import (
 	"github.com/tiozafrem/debtors/models"
 )
 
-func (s *ServiceUser) PinUserToUser(ctx context.Context, userUUIDowner string, userUUIDchild string) error {
+func (s *ServiceUser) PinUserToUser(ctx context.Context, userUUIDowner, userUUIDchild string) error {
 	if userUUIDchild == userUUIDowner {
 		return fmt.Errorf("user owner == user child")
 	}
