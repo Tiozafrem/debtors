@@ -78,6 +78,43 @@ paths:
       summary: Add value to debtors
       tags:
       - transaction
+  /api/user/debtor/{uuid}:
+    post:
+      consumes:
+      - application/json
+      operationId: value-debtor
+      parameters:
+      - description: child user
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handlers.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Pin child user UUID to auth user
+      tags:
+      - user
   /api/user/pin{uuid}:
     post:
       consumes:
