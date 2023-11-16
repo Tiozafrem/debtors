@@ -21,19 +21,22 @@ import (
 func (h *Handler) pinUserToUser(c *gin.Context) {
 	id := c.Param("uuid")
 	if id == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "uuid is null")
+		newErrorResponse(c, http.StatusBadRequest, "uuid is null")
+		return
 	}
 
 	userUUID, err := getUserUUID(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 	err = h.service.User.PinUserToUser(c, userUUID, id)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.AbortWithStatus(http.StatusOK)
+	c.Status(http.StatusOK)
 }
 
 // @Summary Pin child user UUID to auth user
@@ -51,17 +54,20 @@ func (h *Handler) pinUserToUser(c *gin.Context) {
 func (h *Handler) getSumTransactionDebtorUser(c *gin.Context) {
 	id := c.Param("uuid")
 	if id == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "uuid is null")
+		newErrorResponse(c, http.StatusBadRequest, "uuid is null")
+		return
 	}
 
 	userUUID, err := getUserUUID(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 	value, err := h.service.User.GetSumTransactionDebtor(c, userUUID, id)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.AbortWithStatusJSON(http.StatusOK, value)
+	c.JSON(http.StatusOK, value)
 }

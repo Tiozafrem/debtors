@@ -17,12 +17,14 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	ctx := c.Request.Context()
 	token, err := authTokenFromHeader(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, err.Error())
+		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
 	}
 
 	userUUID, err := h.service.ParseTokenToUserUUID(ctx, token)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, err.Error())
+		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
 	}
 
 	c.Set(userCtx, userUUID)

@@ -23,24 +23,29 @@ import (
 func (h *Handler) addTransaction(c *gin.Context) {
 	childUuid := c.Param("uuid")
 	if childUuid == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "uuid is null")
+		newErrorResponse(c, http.StatusBadRequest, "uuid is null")
+		return
 	}
 	valueStr := c.Param("value")
 	if valueStr == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "uuid is null")
+		newErrorResponse(c, http.StatusBadRequest, "uuid is null")
+		return
 	}
 	value, err := strconv.Atoi(valueStr)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 	userUUID, err := getUserUUID(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 	err = h.service.User.AddTransaction(c, userUUID, childUuid, value)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.AbortWithStatus(http.StatusOK)
+	c.Status(http.StatusOK)
 }

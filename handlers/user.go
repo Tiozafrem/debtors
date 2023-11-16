@@ -21,17 +21,20 @@ import (
 func (h *Handler) pinTelegramId(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, "id is null")
+		newErrorResponse(c, http.StatusBadRequest, "id is null")
+		return
 	}
 
 	userUUID, err := getUserUUID(c)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 	err = h.service.User.PinTelegramId(c, userUUID, id)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 
-	c.AbortWithStatus(http.StatusOK)
+	c.Status(http.StatusOK)
 }
