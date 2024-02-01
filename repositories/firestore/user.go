@@ -3,9 +3,11 @@ package firestore
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"cloud.google.com/go/firestore"
 	"github.com/tiozafrem/debtors/models"
+	"google.golang.org/api/iterator"
 )
 
 func (r *RepositoryFirestore) usersCollection() *firestore.CollectionRef {
@@ -37,4 +39,29 @@ func (r *RepositoryFirestore) FindUserBytelegramId(ctx context.Context, id strin
 	}
 	err = docs[0].DataTo(&user)
 	return user, err
+}
+
+func (r *RepositoryFirestore) GetAllMy(ctx context.Context, myUUID string) (map[string]int, error) {
+	iter := r.client.CollectionGroup("users").Where("user_uuid", "==", myUUID).Documents(ctx)
+	users := make(map[string]int)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		if len(strings.Split(doc.Ref.Path, "/")) <= 7 {
+			continue
+		}
+		collection := doc.Ref.Collection("transaction")
+		sum, err := r.getUserSum(ctx, collection)
+		if err != nil {
+			continue
+		}
+		users[doc.Ref.Parent.Parent.ID] = sum
+
+	}
+	return users, nil
 }

@@ -22,6 +22,7 @@ type User interface {
 	AddTransaction(ctx context.Context, userUUIDowner, userUUIDchild string, value int) error
 	GetSumTransactionDebtor(ctx context.Context, userUUID string, debtorUUID string) (int, error)
 	GetSumTransactionDebtors(ctx context.Context, userUUID string) (map[string]int, error)
+	GetSumMy(ctx context.Context, userUUID string) (map[string]int, error)
 }
 
 type Service struct {

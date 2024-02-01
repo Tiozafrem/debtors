@@ -98,3 +98,30 @@ func (h *Handler) getSumTransactionDebtorsUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, value)
 }
+
+// @Summary Get sum transaction my
+// @Security ApiKeyAuth
+// @Tags user
+// @Id value-my
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/user/my [get]
+func (h *Handler) getSumTransactionMy(c *gin.Context) {
+
+	userUUID, err := getUserUUID(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	value, err := h.service.User.GetSumMy(c, userUUID)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, value)
+}

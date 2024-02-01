@@ -28,6 +28,11 @@ func (s *ServiceUser) GetSumTransactionDebtors(ctx context.Context, userUUID str
 	return value, err
 }
 
+func (s *ServiceUser) GetSumMy(ctx context.Context, userUUID string) (map[string]int, error) {
+
+	return s.repository.GetAllMy(ctx, userUUID)
+}
+
 func (s *ServiceUser) PinTelegramId(ctx context.Context, userUUID string, id string) error {
 	user, _ := s.repository.FindUserBytelegramId(ctx, id)
 

@@ -40,6 +40,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 			users.GET("/debtor/:uuid", h.getSumTransactionDebtorUser)
 			users.GET("/debtors", h.getSumTransactionDebtorsUser)
+
+			users.GET("/my", h.getSumTransactionMy)
 		}
 	}
 	return router
