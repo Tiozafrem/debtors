@@ -21,6 +21,7 @@ type User interface {
 	PinUserToUser(ctx context.Context, userUUIDowner string, userUUIDchild string) error
 	AddTransaction(ctx context.Context, userUUIDowner, userUUIDchild string, value int) error
 	GetSumTransactionDebtor(ctx context.Context, userUUID string, debtorUUID string) (int, error)
+	GetSumTransactionDebtors(ctx context.Context, userUUID string) (map[string]int, error)
 }
 
 type Service struct {

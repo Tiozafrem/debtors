@@ -19,7 +19,12 @@ func NewServiceUser(repository *firestore.RepositoryFirestore) *ServiceUser {
 }
 
 func (s *ServiceUser) GetSumTransactionDebtor(ctx context.Context, userUUID string, debtorUUID string) (int, error) {
-	value, err := s.repository.GetSumAllTransaction(ctx, userUUID, debtorUUID)
+	value, err := s.repository.GetSumAllTransactionByDebtor(ctx, userUUID, debtorUUID)
+	return value, err
+}
+
+func (s *ServiceUser) GetSumTransactionDebtors(ctx context.Context, userUUID string) (map[string]int, error) {
+	value, err := s.repository.GetSumAllDebtors(ctx, userUUID)
 	return value, err
 }
 

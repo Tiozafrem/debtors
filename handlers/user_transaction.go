@@ -39,7 +39,7 @@ func (h *Handler) pinUserToUser(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-// @Summary Pin child user UUID to auth user
+// @Summary Get sum transaction user
 // @Security ApiKeyAuth
 // @Tags user
 // @Id value-debtor
@@ -50,7 +50,7 @@ func (h *Handler) pinUserToUser(c *gin.Context) {
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /api/user/debtor/{uuid} [post]
+// @Router /api/user/debtor/{uuid} [get]
 func (h *Handler) getSumTransactionDebtorUser(c *gin.Context) {
 	id := c.Param("uuid")
 	if id == "" {
@@ -64,6 +64,33 @@ func (h *Handler) getSumTransactionDebtorUser(c *gin.Context) {
 		return
 	}
 	value, err := h.service.User.GetSumTransactionDebtor(c, userUUID, id)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, value)
+}
+
+// @Summary Get sum transaction users
+// @Security ApiKeyAuth
+// @Tags user
+// @Id value-debtors
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/user/debtors [get]
+func (h *Handler) getSumTransactionDebtorsUser(c *gin.Context) {
+
+	userUUID, err := getUserUUID(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	value, err := h.service.User.GetSumTransactionDebtors(c, userUUID)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
