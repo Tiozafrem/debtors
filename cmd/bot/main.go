@@ -3,28 +3,21 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"log/slog"
 	"os"
-	"os/signal"
 	"path/filepath"
-	"syscall"
+	"time"
 
 	firebase "firebase.google.com/go"
-	handlers "github.com/tiozafrem/debtors/handlers/gin"
+	"github.com/PaulSonOfLars/gotgbot/v2"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/tiozafrem/debtors/handlers/bot"
 	repostiryFirestory "github.com/tiozafrem/debtors/repositories/firestore"
 	"github.com/tiozafrem/debtors/services"
 	"google.golang.org/api/option"
 )
 
-// @title Debtors API
-// @version 1.0
-// @description Api server for Debtors Application
-
-// @host localhost:8080
-// @BasePath /
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
 func main() {
 	var file_key string
 	ctx := context.Background()
@@ -59,23 +52,41 @@ func main() {
 	rp := repostiryFirestory.NewRepositoryFirestory(ctx, app)
 	service := services.NewService(ctx, app, rp, apiKey)
 
-	handler := handlers.NewHandler(service)
-	srv := Server{}
-	go func() {
-		if err = srv.Run("8080", handler.InitRoutes()); err != nil {
-			slog.Error("error occured while running http server: %s", err.Error())
-		}
-
-	}()
-	slog.Info("server is run")
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
-	<-quit
-
-	slog.Info("Shutting Down")
-
-	if err := srv.Shutdown(ctx); err != nil {
-		slog.Error("error occured on server shutting down: %s", err.Error())
+	token := os.Getenv("TOKEN")
+	if token == "" {
+		panic("TOKEN environment variable is empty")
 	}
 
+	b, err := gotgbot.NewBot(token, nil)
+	if err != nil {
+		panic("failed to create new bot: " + err.Error())
+	}
+
+	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
+		Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
+			log.Println("an error occurred while handling update:", err.Error())
+			return ext.DispatcherActionNoop
+		},
+		MaxRoutines: ext.DefaultMaxRoutines,
+	})
+	updater := ext.NewUpdater(dispatcher, nil)
+
+	handler := bot.NewHandler(service, dispatcher)
+	_ = handler
+
+	err = updater.StartPolling(b, &ext.PollingOpts{
+		DropPendingUpdates: true,
+		GetUpdatesOpts: &gotgbot.GetUpdatesOpts{
+			Timeout: 9,
+			RequestOpts: &gotgbot.RequestOpts{
+				Timeout: time.Second * 10,
+			},
+		},
+	})
+	if err != nil {
+		panic("failed to start polling: " + err.Error())
+	}
+	log.Printf("%s has been started...\n", b.User.Username)
+
+	updater.Idle()
 }

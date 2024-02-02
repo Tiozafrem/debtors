@@ -46,6 +46,16 @@ func (s *ServiceUser) PinTelegramId(ctx context.Context, userUUID string, id str
 	})
 }
 
+func (s *ServiceUser) GetUUIDByTelegramId(ctx context.Context, id string) (string, error) {
+	user, err := s.repository.FindUserBytelegramId(ctx, id)
+
+	if user == nil {
+		return "", err
+	}
+
+	return user.UserUUID, err
+}
+
 func (s *ServiceUser) ExistUser(ctx context.Context, userUUID string) bool {
 	_, err := s.repository.FindUserByUUID(ctx, userUUID)
 	return err == nil

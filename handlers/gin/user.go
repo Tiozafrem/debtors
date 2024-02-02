@@ -1,4 +1,4 @@
-package handlers
+package gin
 
 import (
 	"net/http"
