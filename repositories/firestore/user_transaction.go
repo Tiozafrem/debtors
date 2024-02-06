@@ -14,6 +14,27 @@ func (r *RepositoryFirestore) usersTransactionCollection(userUUIDOwner string) *
 	return r.usersCollection().Doc(userUUIDOwner).Collection("users")
 }
 
+func (r *RepositoryFirestore) GetUsersMy(ctx context.Context, uuid string) ([]models.User, error) {
+	var users []models.User
+	var user models.User
+	iter := r.usersTransactionCollection(uuid).Documents(ctx)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		err = doc.DataTo(&user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
 func (r *RepositoryFirestore) getUserSum(ctx context.Context, collection *firestore.CollectionRef) (int, error) {
 	query := collection.NewAggregationQuery().WithSum("value", "sum")
 	results, err := query.Get(ctx)

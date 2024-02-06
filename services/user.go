@@ -55,9 +55,19 @@ func (s *ServiceUser) GetUUIDByTelegramId(ctx context.Context, id string) (strin
 
 	return user.UserUUID, err
 }
+
 func (s *ServiceUser) GetUsers(ctx context.Context) ([]models.User, error) {
 	return s.repository.GetUsers(ctx)
 }
+
+func (s *ServiceUser) GetUsersMy(ctx context.Context, userUUID string) ([]models.User, error) {
+	return s.repository.GetUsersMy(ctx, userUUID)
+}
+
+func (s *ServiceUser) GetUsersNotMy(ctx context.Context, userUUID string) ([]models.User, error) {
+	return s.repository.GetUsersNotMy(ctx, userUUID)
+}
+
 func (s *ServiceUser) ExistUser(ctx context.Context, userUUID string) bool {
 	_, err := s.repository.FindUserByUUID(ctx, userUUID)
 	return err == nil

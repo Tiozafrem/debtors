@@ -3,6 +3,7 @@ package firestore
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"cloud.google.com/go/firestore"
@@ -44,6 +45,37 @@ func (r *RepositoryFirestore) GetUsers(ctx context.Context) ([]models.User, erro
 		if err != nil {
 			return nil, err
 		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
+func (r *RepositoryFirestore) GetUsersNotMy(ctx context.Context, uuid string) ([]models.User, error) {
+	var users []models.User
+	var user models.User
+	myUsers, err := r.GetUsersMy(ctx, uuid)
+	if err != nil {
+		return nil, err
+	}
+	iter := r.usersCollection().Where("user_uuid", "!=", uuid).Documents(ctx)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		err = doc.DataTo(&user)
+		if err != nil {
+			return nil, err
+		}
+
+		if slices.Contains(myUsers, user) {
+			continue
+		}
+
 		users = append(users, user)
 	}
 	return users, nil
