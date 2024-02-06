@@ -24,6 +24,7 @@ type User interface {
 	GetSumTransactionDebtor(ctx context.Context, userUUID string, debtorUUID string) (int, error)
 	GetSumTransactionDebtors(ctx context.Context, userUUID string) (map[string]int, error)
 	GetSumMy(ctx context.Context, userUUID string) (map[string]int, error)
+	GetUsers(ctx context.Context) ([]*models.User, error)
 }
 
 type Service struct {

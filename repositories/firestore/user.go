@@ -28,6 +28,27 @@ func (r *RepositoryFirestore) FindUserByUUID(ctx context.Context, uuid string) (
 	return user, err
 }
 
+func (r *RepositoryFirestore) GetUsers(ctx context.Context) ([]*models.User, error) {
+	var users []*models.User
+	var user *models.User
+	iter := r.usersCollection().Documents(ctx)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		err = doc.DataTo(&user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
 func (r *RepositoryFirestore) FindUserBytelegramId(ctx context.Context, id string) (*models.User, error) {
 	var user *models.User
 	docs, err := r.usersCollection().Where("telegram_id", "==", id).Documents(ctx).GetAll()

@@ -43,6 +43,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 			users.GET("/my", h.getSumTransactionMy)
 		}
+		api.GET("/users", h.getUsers)
 	}
 	return router
 }

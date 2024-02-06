@@ -1,18 +1,18 @@
 basePath: /
 definitions:
-  handlers.errorResponse:
+  gin.errorResponse:
     properties:
       message:
         type: string
     type: object
-  handlers.refreshInput:
+  gin.refreshInput:
     properties:
       refresh_token:
         type: string
     required:
     - refresh_token
     type: object
-  handlers.signInput:
+  gin.signInput:
     properties:
       email:
         type: string
@@ -60,19 +60,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       security:
       - ApiKeyAuth: []
       summary: Add value to debtors
@@ -97,19 +97,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       security:
       - ApiKeyAuth: []
       summary: Get sum transaction user
@@ -128,19 +128,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       security:
       - ApiKeyAuth: []
       summary: Get sum transaction users
@@ -159,19 +159,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       security:
       - ApiKeyAuth: []
       summary: Get sum transaction my
@@ -196,19 +196,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       security:
       - ApiKeyAuth: []
       summary: Pin child user UUID to auth user
@@ -233,22 +233,53 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       security:
       - ApiKeyAuth: []
       summary: Pin telegram id to auth user
+      tags:
+      - user
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      operationId: users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/gin.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all users in system
       tags:
       - user
   /auth/refresh:
@@ -263,7 +294,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handlers.refreshInput'
+          $ref: '#/definitions/gin.refreshInput'
       produces:
       - application/json
       responses:
@@ -274,19 +305,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       summary: Refresh
       tags:
       - auth
@@ -302,7 +333,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handlers.signInput'
+          $ref: '#/definitions/gin.signInput'
       produces:
       - application/json
       responses:
@@ -313,19 +344,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       summary: SignIn
       tags:
       - auth
@@ -341,7 +372,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/handlers.signInput'
+          $ref: '#/definitions/gin.signInput'
       produces:
       - application/json
       responses:
@@ -352,19 +383,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/handlers.errorResponse'
+            $ref: '#/definitions/gin.errorResponse'
       summary: SignUp
       tags:
       - auth
