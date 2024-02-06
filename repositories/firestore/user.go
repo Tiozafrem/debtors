@@ -28,9 +28,9 @@ func (r *RepositoryFirestore) FindUserByUUID(ctx context.Context, uuid string) (
 	return user, err
 }
 
-func (r *RepositoryFirestore) GetUsers(ctx context.Context) ([]*models.User, error) {
-	var users []*models.User
-	var user *models.User
+func (r *RepositoryFirestore) GetUsers(ctx context.Context) ([]models.User, error) {
+	var users []models.User
+	var user models.User
 	iter := r.usersCollection().Documents(ctx)
 	for {
 		doc, err := iter.Next()

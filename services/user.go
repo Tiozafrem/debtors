@@ -55,7 +55,7 @@ func (s *ServiceUser) GetUUIDByTelegramId(ctx context.Context, id string) (strin
 
 	return user.UserUUID, err
 }
-func (s *ServiceUser) GetUsers(ctx context.Context) ([]*models.User, error) {
+func (s *ServiceUser) GetUsers(ctx context.Context) ([]models.User, error) {
 	return s.repository.GetUsers(ctx)
 }
 func (s *ServiceUser) ExistUser(ctx context.Context, userUUID string) bool {
