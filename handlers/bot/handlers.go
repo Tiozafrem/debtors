@@ -8,6 +8,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/conversation"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/message"
 	"github.com/tiozafrem/debtors/services"
 )
@@ -57,6 +58,9 @@ func (h *Handler) InitRoutes() {
 		handlerAuth,
 		handlerOpts,
 	))
+
+	h.dispatcher.AddHandler(handlers.NewCommand("pin_print", h.getUsers))
+	h.dispatcher.AddHandler(handlers.NewCallback(callbackquery.Prefix("pin_user"), h.pinUserToUser))
 }
 
 func noCommands(msg *gotgbot.Message) bool {
@@ -65,7 +69,7 @@ func noCommands(msg *gotgbot.Message) bool {
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, err := ctx.EffectiveMessage.Reply(b, "write /register or /login to continue work",
-		&gotgbot.SendMessageOpts{})
+		nil)
 	if err != nil {
 		return fmt.Errorf("failed to send start message: %w", err)
 	}
@@ -75,26 +79,4 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 
 func (h *Handler) getUserUUIDByTelegramId(id int64) (string, error) {
 	return h.service.GetUUIDByTelegramId(context.Background(), fmt.Sprint(id))
-}
-
-func (h *Handler) login(b *gotgbot.Bot, ctx *ext.Context) error {
-	_, err := ctx.EffectiveMessage.Reply(b, "write email",
-		&gotgbot.SendMessageOpts{})
-	if err != nil {
-		return fmt.Errorf("failed to send start message: %w", err)
-	}
-	h.usersEmail[ctx.EffectiveUser.Id] = &userInput{endpoint: h.signIn}
-	return handlers.NextConversationState(email)
-
-}
-
-func (h *Handler) register(b *gotgbot.Bot, ctx *ext.Context) error {
-	_, err := ctx.EffectiveMessage.Reply(b, "write email",
-		&gotgbot.SendMessageOpts{})
-	if err != nil {
-		return fmt.Errorf("failed to send start message: %w", err)
-	}
-	h.usersEmail[ctx.EffectiveUser.Id] = &userInput{endpoint: h.signUp}
-	return handlers.NextConversationState(email)
-
 }
