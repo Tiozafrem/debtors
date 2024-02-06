@@ -1,8 +1,18 @@
 package bot
 
+import (
+	"context"
+	"fmt"
+
+	"github.com/PaulSonOfLars/gotgbot/v2"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+)
+
 // func (h *Handler) getSumTransactionDebtorUser(b *gotgbot.Bot, ctx *ext.Context) error {
 // 	id := c.Param("uuid")
 // 	if id == "" {
+// 		ctx.EffectiveMessage.Reply(b, "you must sign in", nil)
+// 		return err
 // 		newErrorResponse(c, http.StatusBadRequest, "uuid is null")
 // 		return nil
 // 	}
@@ -22,36 +32,38 @@ package bot
 // 	return nil
 // }
 
-// func (h *Handler) getSumTransactionDebtorsUser(b *gotgbot.Bot, ctx *ext.Context) error {
+func (h *Handler) getSumTransactionDebtorsUser(b *gotgbot.Bot, ctx *ext.Context) error {
+	userUUID, err := h.getUserUUIDByTelegramId(ctx.EffectiveUser.Id)
+	if userUUID == "" || err != nil {
+		ctx.EffectiveMessage.Reply(b, "you must sign in", nil)
+		return err
+	}
 
-// 	userUUID, err := getUserUUID(c)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-// 		return nil
-// 	}
-// 	value, err := h.service.User.GetSumTransactionDebtors(c, userUUID)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-// 		return nil
-// 	}
+	cntx := context.Background()
+	value, err := h.service.User.GetSumTransactionDebtors(cntx, userUUID)
+	if err != nil {
+		ctx.EffectiveMessage.Reply(b, err.Error(), nil)
+		return err
+	}
 
-// 	c.JSON(http.StatusOK, value)
-// 	return nil
-// }
+	ctx.EffectiveChat.SendMessage(b, fmt.Sprintln(value), nil)
+	return nil
+}
 
-// func (h *Handler) getSumTransactionMy(b *gotgbot.Bot, ctx *ext.Context) error {
+func (h *Handler) getSumTransactionMy(b *gotgbot.Bot, ctx *ext.Context) error {
+	userUUID, err := h.getUserUUIDByTelegramId(ctx.EffectiveUser.Id)
+	if userUUID == "" || err != nil {
+		ctx.EffectiveMessage.Reply(b, "you must sign in", nil)
+		return err
+	}
 
-// 	userUUID, err := getUserUUID(c)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-// 		return nil
-// 	}
-// 	value, err := h.service.User.GetSumMy(c, userUUID)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-// 		return nil
-// 	}
+	cntx := context.Background()
+	value, err := h.service.User.GetSumMy(cntx, userUUID)
+	if err != nil {
+		ctx.EffectiveMessage.Reply(b, err.Error(), nil)
+		return err
+	}
 
-// 	c.JSON(http.StatusOK, value)
-// 	return nil
-// }
+	ctx.EffectiveChat.SendMessage(b, fmt.Sprintln(value), nil)
+	return nil
+}

@@ -10,13 +10,13 @@ import (
 )
 
 func (h *Handler) getUsers(b *gotgbot.Bot, ctx *ext.Context) error {
-	cntx := context.Background()
 	userUUID, err := h.getUserUUIDByTelegramId(ctx.EffectiveUser.Id)
 	if userUUID == "" || err != nil {
-		ctx.EffectiveMessage.Reply(b, "you must sign in", &gotgbot.SendMessageOpts{})
+		ctx.EffectiveMessage.Reply(b, "you must sign in", nil)
 		return err
 	}
 
+	cntx := context.Background()
 	users, err := h.service.User.GetUsersNotMy(cntx,
 		userUUID)
 	if err != nil {
@@ -46,7 +46,7 @@ func (h *Handler) getUsers(b *gotgbot.Bot, ctx *ext.Context) error {
 func (h *Handler) pinUserToUser(b *gotgbot.Bot, ctx *ext.Context) error {
 	userUUID, err := h.getUserUUIDByTelegramId(ctx.EffectiveUser.Id)
 	if userUUID == "" || err != nil {
-		ctx.EffectiveMessage.Reply(b, "you must sign in", &gotgbot.SendMessageOpts{})
+		ctx.EffectiveMessage.Reply(b, "you must sign in", nil)
 		return err
 	}
 
@@ -63,7 +63,7 @@ func (h *Handler) pinUserToUser(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	err = h.service.User.PinUserToUser(cntx, userUUID, userPin)
 	if err != nil {
-		ctx.EffectiveMessage.Reply(b, err.Error(), &gotgbot.SendMessageOpts{})
+		ctx.EffectiveMessage.Reply(b, err.Error(), nil)
 		return err
 	}
 	_, _, err = cb.Message.EditText(b, fmt.Sprintf("%s successfully pin", userPin), nil)

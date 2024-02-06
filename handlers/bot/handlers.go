@@ -61,6 +61,9 @@ func (h *Handler) InitRoutes() {
 
 	h.dispatcher.AddHandler(handlers.NewCommand("pin_print", h.getUsers))
 	h.dispatcher.AddHandler(handlers.NewCallback(callbackquery.Prefix("pin_user"), h.pinUserToUser))
+
+	h.dispatcher.AddHandler(handlers.NewCommand("my_debtors", h.getSumTransactionDebtorsUser))
+	h.dispatcher.AddHandler(handlers.NewCommand("i_debtor", h.getSumTransactionMy))
 }
 
 func noCommands(msg *gotgbot.Message) bool {
