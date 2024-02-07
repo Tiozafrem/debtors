@@ -64,6 +64,9 @@ func (h *Handler) InitRoutes() {
 
 	h.dispatcher.AddHandler(handlers.NewCommand("my_debtors", h.getSumTransactionDebtorsUser))
 	h.dispatcher.AddHandler(handlers.NewCommand("i_debtor", h.getSumTransactionMy))
+
+	h.dispatcher.AddHandler(handlers.NewCommand("debtors_print", h.getMyDebtors))
+	h.dispatcher.AddHandler(handlers.NewCallback(callbackquery.Prefix("debtor"), h.getMyDebtor))
 }
 
 func noCommands(msg *gotgbot.Message) bool {
