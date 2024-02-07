@@ -3,34 +3,11 @@ package bot
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
-
-// func (h *Handler) getSumTransactionDebtorUser(b *gotgbot.Bot, ctx *ext.Context) error {
-// 	id := c.Param("uuid")
-// 	if id == "" {
-// 		ctx.EffectiveMessage.Reply(b, "you must sign in", nil)
-// 		return err
-// 		newErrorResponse(c, http.StatusBadRequest, "uuid is null")
-// 		return nil
-// 	}
-
-// 	userUUID, err := getUserUUID(c)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-// 		return nil
-// 	}
-// 	value, err := h.service.User.GetSumTransactionDebtor(c, userUUID, id)
-// 	if err != nil {
-// 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-// 		return nil
-// 	}
-
-// 	c.JSON(http.StatusOK, value)
-// 	return nil
-// }
 
 func (h *Handler) getSumTransactionDebtorsUser(b *gotgbot.Bot, ctx *ext.Context) error {
 	userUUID, err := h.getUserUUIDByTelegramId(ctx.EffectiveUser.Id)
@@ -46,8 +23,7 @@ func (h *Handler) getSumTransactionDebtorsUser(b *gotgbot.Bot, ctx *ext.Context)
 		return err
 	}
 
-	ctx.EffectiveChat.SendMessage(b, fmt.Sprintln(value), nil)
-	return nil
+	return h.sendMapMessage(b, ctx, value)
 }
 
 func (h *Handler) getSumTransactionMy(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -64,6 +40,16 @@ func (h *Handler) getSumTransactionMy(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	ctx.EffectiveChat.SendMessage(b, fmt.Sprintln(value), nil)
-	return nil
+	return h.sendMapMessage(b, ctx, value)
+}
+
+func (h *Handler) sendMapMessage(b *gotgbot.Bot, ctx *ext.Context, message map[string]int) error {
+	builder := strings.Builder{}
+
+	for key, value := range message {
+		builder.WriteString(fmt.Sprintf("%s : %d\n", key, value))
+	}
+
+	_, err := ctx.EffectiveChat.SendMessage(b, builder.String(), nil)
+	return err
 }
