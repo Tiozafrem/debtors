@@ -16,6 +16,7 @@ import (
 const (
 	email    = "email"
 	password = "password"
+	value    = "value"
 )
 
 type userInput struct {
@@ -67,6 +68,16 @@ func (h *Handler) InitRoutes() {
 
 	h.dispatcher.AddHandler(handlers.NewCommand("debtors_print", h.getMyDebtors))
 	h.dispatcher.AddHandler(handlers.NewCallback(callbackquery.Prefix("debtor"), h.getMyDebtor))
+
+	h.dispatcher.AddHandler(handlers.NewConversation(
+		[]ext.Handler{handlers.NewCommand("add_value", h.printAddTransaction)},
+		map[string][]ext.Handler{
+			value: {handlers.NewMessage(noCommands, h.addTransaction)},
+		},
+		handlerOpts,
+	))
+	h.dispatcher.AddHandler(handlers.NewCallback(callbackquery.Prefix(value), h.addTransactionCallback))
+
 }
 
 func noCommands(msg *gotgbot.Message) bool {
