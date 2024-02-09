@@ -56,6 +56,7 @@ func (h *Handler) signUp(b *gotgbot.Bot, ctx *ext.Context) error {
 		return handlers.NextConversationState(email)
 	}
 
+	delete(h.usersEmail, ctx.EffectiveUser.Id)
 	return handlers.EndConversation()
 }
 
@@ -85,6 +86,7 @@ func (h *Handler) signIn(b *gotgbot.Bot, ctx *ext.Context) error {
 		return handlers.NextConversationState(email)
 	}
 
+	delete(h.usersEmail, ctx.EffectiveUser.Id)
 	return handlers.EndConversation()
 }
 
